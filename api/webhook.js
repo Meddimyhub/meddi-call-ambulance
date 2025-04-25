@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const fromNumber = process.env.GOTO_FROM_NUMBER; // El número de cabecera registrado
   
     try {
-      const callResponse = await fetch('https://api.goto.com/voice/v1/calls', {
+      const callResponse = await fetch('https://api.goto.com/voice-admin/v1/calls', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
