@@ -16,7 +16,7 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             DIALOG_ID: process.env.BITRIX_CHAT_ID,
-            MESSAGE: '✅ ¡Llamada atendida por el equipo de emergencias!'
+            MESSAGE: '✅ ¡Llamada atendida por el equipo!'
           })
         });
   
