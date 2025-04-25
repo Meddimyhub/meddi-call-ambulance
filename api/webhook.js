@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           to: phoneNumberToCall,
-          from: phoneNumberToCall, // opcionalmente puedes cambiar el 'from' después
+          from: process.env.GOTO_FROM_NUMBER, // opcionalmente puedes cambiar el 'from' después
           autoAnswer: false
         })
       });
