@@ -6,12 +6,12 @@ export default async function handler(req, res) {
     const accessToken = process.env.GOTO_ACCESS_TOKEN;
     const environment = process.env.CALL_ENVIRONMENT || 'test';
   
-    const phoneNumberToCall =
+    const toNumber =
       environment === 'prod'
         ? process.env.TARGET_PHONE_NUMBER_PROD
         : process.env.TARGET_PHONE_NUMBER_TEST;
   
-    const fromNumber = process.env.GOTO_FROM_NUMBER;
+    const fromNumber = process.env.GOTO_FROM_NUMBER; // El número de cabecera registrado
   
     try {
       const callResponse = await fetch('https://api.goto.com/voice/v1/calls', {
@@ -21,8 +21,8 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          to: phoneNumberToCall,
-          from: fromNumber, // 👈 Aquí ahora es el número válido
+          to: toNumber,    // Número de destino (tu cel)
+          from: fromNumber, // Número cabecera registrado
           autoAnswer: false
         })
       });
@@ -30,13 +30,14 @@ export default async function handler(req, res) {
       const result = await callResponse.json();
   
       if (callResponse.ok) {
-        return res.status(200).json({ message: 'Llamada enviada', result });
+        return res.status(200).json({ message: 'Llamada enviada correctamente', result });
       } else {
-        return res.status(500).json({ error: 'Error en llamada', result });
+        console.error('Error en llamada:', result);
+        return res.status(500).json({ error: 'Error en llamada', details: result });
       }
-    } catch (err) {
-      console.error('ERROR:', err);
-      return res.status(500).json({ error: 'Error interno', details: err.message });
+    } catch (error) {
+      console.error('Error general:', error);
+      return res.status(500).json({ error: 'Fallo general en el servidor', message: error.message });
     }
   }
   
